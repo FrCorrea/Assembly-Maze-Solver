@@ -1,5 +1,13 @@
+# * -------------- Maze Solver -------------- *
+# Programa desenvolvido em colaboração entre os alunos:
+# Júlio César Guimarães Costa - RA: 2203049
+# Francisco Correa Neto - RA: 2201615
+# Mariana Regina Cabrinha de Lima - RA: 2203065
+# * ----------------------------------------- *
+
+# 1.Definição de referências globais
 .data
-arquivo: .asciiz "maze-1-2.pgm"           # Nome do arquivo a ser lido
+arquivo: .asciiz "maze-1-1.pgm"           # Nome do arquivo a ser lido
 nome_arquivo: .asciiz "Solucao.pgm"       # Nome do arquivo a ser escrito                
 buffer: .space 128000                     # Quantidade de bits a ser utilizida
 
@@ -9,6 +17,7 @@ espaco: .asciiz " "                       # Código do ASCII para espaço
 zero: .asciiz "0"                         # Código do ASCII para zero
 dois: .asciiz "2"                         # Código do ASCII para dois
 
+# 2.Abertura e fechamento do arquivo
 .text
 abre_arquivo:
     li $v0, 13                            # Atribui 13 para $v0. Código para abrir arquivo
@@ -33,6 +42,8 @@ le_arquivo:
        
     li $t2, 0                             # Contador auxiliar iniciado em 0 no $t2
     lb $t3, pula                          # Código do ASCII para nova linha no $t3
+
+# 3.Obtenção das linhas e colunas 
 acha_proporcao: # Não sobrepor $t0
 
     lb $t1, 0($s0)                        # Pega o byte contido na posição atual do vetor
@@ -81,7 +92,8 @@ exit2:
     add $s2, $s2, $t2                     # $s2 passa a ser o registrador da altura
     lb $t3, zero                          # Colocamos o código do ASCII para zero no $t3
     lb $t4, dois                          # Colocamos o código do ASCII para dois no $t4
-    
+
+# 4.Procura do início do labirinto  
 procura_labirinto: # Não sobrepor $t0, $t1, $s1 e $s2
 
     lb $t1, 0($s0)                        # Pega o byte contido na posição atual do vetor
@@ -96,6 +108,7 @@ exit3:
     li $t6, 1                             # Contador auxiliar de linhas
     li $t7, 0                             # Contador auxiliar de entradas
 
+# 5.Marcação da entrada e da saída do labirinto
 procura_entrada: # Não sobrepor $t0, $t1, $s1 e $s2
 
     lb $t1, 0($s0)                        # Pega o byte contido na posição atual do vetor
@@ -142,7 +155,7 @@ procura_entrada: # Não sobrepor $t0, $t1, $s1 e $s2
     		li $t7, 0                 # Contador auxiliar de entradas
                 # Como já achamos a entrada e saída do labirinto, não voltamos ao início do loop e só deixamos o código seguir
                 
-# Não sobrepor $t0, $t1, $s1 e $s2
+# 6.A resolução do labirinto através do metodo da eliminação dos caminhos falhos
 resolve_labirinto:    
 	move $s0, $s3 # Retorna ao inicio do labirinto
 	encontra_branco: # Encontra uma entidade branca
@@ -222,7 +235,8 @@ resolve_labirinto:
 	subi $t1, $t1, 2 # transforma o primeiro byte em 0
         sb $t1, 0($s0) # subistitui por 0
         j resolve_labirinto  
-		
+
+# 7.Escrita do arquivo PGM de saída		
 cria_arquivo: # Não sobrepor $t0
 
     li $v0, 13                            # Atribui 13 para $v0. Código para abrir arquivo
