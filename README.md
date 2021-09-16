@@ -1,2 +1,2 @@
 # assembly-maze-solver
-An maze solver made in assembly with MARS IDE, using an recursive algorithm.
+A PGM maze solver made with assembly in MAPS IDE using the dead-end filling algorithm for the Computers Organization Discipline.
